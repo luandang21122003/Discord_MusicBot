@@ -61,6 +61,7 @@ yt_opts = {
     "no_warnings": True,
     "default_search": "auto",
     "extract_flat": "in_playlist",
+    "cookiefile": COOKIE_PATH,   # <-- important
 }
 
 # Only add cookiefile if it exists
