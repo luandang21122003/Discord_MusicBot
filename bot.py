@@ -46,8 +46,10 @@ yt_opts = {
     "quiet": True,
     "no_warnings": True,
     "default_search": "auto",
-    "extract_flat": "in_playlist"
+    "extract_flat": "in_playlist",
+    "cookiefile": "cookies.txt"
 }
+
 ytdl = yt_dlp.YoutubeDL(yt_opts)
 
 def get_queue(ctx):
