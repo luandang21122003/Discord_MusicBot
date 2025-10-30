@@ -41,13 +41,18 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 queues = {}  # {guild_id: [urls]}
 
 # --- YTDL CONFIG ---
+COOKIE_PATH = "/etc/secrets/cookies.txt"
+if not os.path.exists(COOKIE_PATH):
+    # fallback for running locally
+    COOKIE_PATH = "cookies.txt"
+
 yt_opts = {
     "format": "bestaudio/best",
     "quiet": True,
     "no_warnings": True,
     "default_search": "auto",
     "extract_flat": "in_playlist",
-    "cookiefile": "cookies.txt"
+    "cookiefile": COOKIE_PATH,   # <--- IMPORTANT
 }
 
 ytdl = yt_dlp.YoutubeDL(yt_opts)
