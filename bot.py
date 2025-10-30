@@ -57,6 +57,8 @@ yt_opts = {
 
 ytdl = yt_dlp.YoutubeDL(yt_opts)
 
+print(">>> Using cookie file path:", COOKIE_PATH)
+
 def get_queue(ctx):
     return queues.setdefault(ctx.guild.id, [])
 
