@@ -41,10 +41,19 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 queues = {}  # {guild_id: [urls]}
 
 # --- YTDL CONFIG ---
-COOKIE_PATH = "/etc/secrets/cookies.txt"
-if not os.path.exists(COOKIE_PATH):
-    # fallback for running locally
-    COOKIE_PATH = "cookies.txt"
+# Explicitly check both local and Render secret file locations
+LOCAL_COOKIE = "cookies.txt"
+RENDER_COOKIE = "/etc/secrets/cookies.txt"
+
+if os.path.exists(RENDER_COOKIE):
+    COOKIE_PATH = RENDER_COOKIE
+    print("✅ Found cookie file in Render:", COOKIE_PATH)
+elif os.path.exists(LOCAL_COOKIE):
+    COOKIE_PATH = LOCAL_COOKIE
+    print("✅ Found local cookie file:", COOKIE_PATH)
+else:
+    COOKIE_PATH = None
+    print("❌ No cookie file found — YouTube playback will fail.")
 
 yt_opts = {
     "format": "bestaudio/best",
@@ -52,10 +61,14 @@ yt_opts = {
     "no_warnings": True,
     "default_search": "auto",
     "extract_flat": "in_playlist",
-    "cookiefile": COOKIE_PATH,   # <--- IMPORTANT
 }
-print(">>> Using cookie file path:", COOKIE_PATH)
 
+# Only add cookiefile if it exists
+if COOKIE_PATH:
+    yt_opts["cookiefile"] = COOKIE_PATH
+    print("🍪 yt_dlp will use cookiefile =", COOKIE_PATH)
+else:
+    print("⚠️ yt_dlp running without cookies")
 
 ytdl = yt_dlp.YoutubeDL(yt_opts)
 
