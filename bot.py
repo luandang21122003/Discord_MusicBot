@@ -5,6 +5,21 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import yt_dlp
+from threading import Thread
+from flask import Flask
+
+# --- KEEP-ALIVE SERVER FOR RENDER ---
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "✅ Luan Music Bot is running on Render!"
+
+def run_web():
+    app.run(host='0.0.0.0', port=8080)
+
+Thread(target=run_web).start()
+# -------------------------------------
 
 # show more info in console
 logging.basicConfig(level=logging.INFO)
@@ -12,7 +27,8 @@ logging.basicConfig(level=logging.INFO)
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
-FFMPEG_PATH = r"D:\ffmpeg\bin\ffmpeg.exe"  # <-- your ffmpeg path
+# On Render, ffmpeg is installed globally
+FFMPEG_PATH = "ffmpeg"
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -84,7 +100,6 @@ async def on_ready():
 
 @bot.command(help="Play a YouTube or SoundCloud link, or search query")
 async def play(ctx, *, query: str):
-    # must be in voice
     if not ctx.author.voice:
         return await ctx.send("❗ Join a voice channel first!")
     await join_channel(ctx)
