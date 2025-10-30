@@ -54,10 +54,12 @@ yt_opts = {
     "extract_flat": "in_playlist",
     "cookiefile": COOKIE_PATH,   # <--- IMPORTANT
 }
+print(">>> Using cookie file path:", COOKIE_PATH)
+
 
 ytdl = yt_dlp.YoutubeDL(yt_opts)
 
-print(">>> Using cookie file path:", COOKIE_PATH)
+
 
 def get_queue(ctx):
     return queues.setdefault(ctx.guild.id, [])
